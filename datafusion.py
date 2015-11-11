@@ -35,10 +35,12 @@ for subdir, dirs, files in os.walk("data/training_set"):
                     mId = currentMovie.__str__()
                     dateOfRelease = int(movieInfo[currentMovie.__str__()])
                     movieRatings.append([currentMovie, userId, userRating, dateOfRating, dateOfRelease])
-
-with open("consolidatedRatings.csv", "wb") as csvFile:
-    writer = csv.writer(csvFile,delimiter=',')
-    writer.writerows(movieRatings)
+        print(filePath, movieRatings.__len__())
+        if(currentMovie % 1000 == 0):
+            with open("consolidatedRatings_" + currentMovie.__str__() +  ".csv", "wb") as csvFile:
+                writer = csv.writer(csvFile,delimiter=',')
+                writer.writerows(movieRatings)
+            movieRatings = []
 
 df_ = pd.DataFrame(movieRatings, columns=['movieid', 'userid', 'rating', 'ratingdate', 'releasedate'])
 y, X = dmatrices('rating ~ movieid + userid + ratingdate + releasedate', df_, return_type="dataframe")
